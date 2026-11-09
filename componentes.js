@@ -365,12 +365,21 @@
       <circle cx="60" cy="40" r="18" fill="#EE6926"/>
       <g transform="translate(166 66)"><path d="M18 52s-18-15.6-18-30.6a18 18 0 0 1 36 0C36 36.4 18 52 18 52Z" fill="#2A433D"/><circle cx="18" cy="21" r="6.5" fill="#FEE6CE"/></g></svg>`;
     const info = (l.info || []).map((i) => `<li>${ic(i.icone)}<div><strong>${esc(i.titulo)}</strong><br><span>${esc(i.texto)}</span>${i.exemplo ? ' ' + DL.exemplo() : ''}</div></li>`).join('');
-    // O mapa ilustrado também é um link para o Google Maps
+    // Mapa interativo do Google (iframe). O print fica por baixo e aparece
+    // enquanto o mapa carrega; quando carrega, o mapa surge com um fade.
+    if (l.mapaEmbed) {
+      const poster = l.mapaImagem ? `<img class="local__mapa-poster" src="${esc(l.mapaImagem)}" alt="" aria-hidden="true" decoding="async">` : mapa;
+      const mapaEmbed = `<div class="local__mapa local__mapa--embed">${poster}<iframe src="${esc(l.mapaEmbed)}" title="Mapa interativo: ${esc(l.nome || l.endereco)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen onload="var p=this.parentNode;setTimeout(function(){p.classList.add('is-carregado')},2200)"></iframe></div>`;
+      // O "load" do iframe chega antes de o Google desenhar ruas e pino:
+      // o print segura a cena por 2,2 s e só então cede lugar ao mapa.
+      return DL.local({ ...l, mapaEmbed: null, _mapaPronto: mapaEmbed });
+    }
+    // O mapa ilustrado (ou o print) também é um link para o Google Maps
     const mapaTag = l.mapaHref ? `a href="${esc(l.mapaHref)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(l.nome || l.endereco)} no Google Maps (abre em nova aba)"` : 'div';
     return `<article class="cartao local">
-      <${mapaTag} class="${cls('local__mapa', l.mapaImagem && 'local__mapa--real')}">${l.mapaImagem
+      ${l._mapaPronto || `<${mapaTag} class="${cls('local__mapa', l.mapaImagem && 'local__mapa--real')}">${l.mapaImagem
         ? `<img src="${esc(l.mapaImagem)}" alt="${esc(l.mapaAlt || 'Mapa do local de atendimento')}" loading="lazy" decoding="async"><span class="local__mapa-credito">${esc(l.mapaCredito || '© Google')}</span><span class="local__mapa-acao" aria-hidden="true">${ic('externo')}Ver no Google Maps</span>`
-        : `${mapa}<span class="local__mapa-rotulo">${DL.exemplo('mapa ilustrativo')}</span>`}</${l.mapaHref ? 'a' : 'div'}>
+        : `${mapa}<span class="local__mapa-rotulo">${DL.exemplo('mapa ilustrativo')}</span>`}</${l.mapaHref ? 'a' : 'div'}>`}
       <div class="local__corpo">
         <div><p class="eyebrow">${esc(l.eyebrow || 'Consultório')}</p>${l.nome ? `<p class="local__endereco">${esc(l.nome)}</p><p class="t-pequeno" style="margin-top:4px">${esc(l.endereco)}</p>` : `<p class="local__endereco">${esc(l.endereco)}</p>`}<p class="t-legenda">${esc(l.complemento || '')} ${l.exemplo ? DL.exemplo() : ''}</p></div>
         <ul class="lista-info">${info}</ul>

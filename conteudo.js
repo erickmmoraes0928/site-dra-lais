@@ -117,7 +117,10 @@ window.DL_CONTEUDO = {
     complemento: 'Pres. Costa e Silva, Itaperuna · RJ, 28300‑000', // hífen que não quebra linha
     exemplo: false,
     mapaHref: 'https://maps.app.goo.gl/oZLL1FFkyvNhZmwF7',
-    mapaImagem: 'assets/mapa-integra.png',  // recorte do Google Maps centrado no pino
+    // Mapa interativo do Google (sem chave de API). Para trocar o local, mude o q=.
+    // Busca pelo nome: mostra o pino e o cartão do lugar (testado; com &ll= o pino some)
+    mapaEmbed: 'https://maps.google.com/maps?q=%C3%8Dntegra%20-%20Instituto%20de%20Sa%C3%BAde%20Integrativa%2C%20Itaperuna%20RJ&z=17&hl=pt-BR&output=embed',
+    mapaImagem: 'assets/mapa-integra.png',  // print usado enquanto o mapa interativo carrega
     mapaAlt: 'Mapa com o pino da Íntegra, Instituto de Saúde Integrativa, em Itaperuna',
     mapaCredito: '© Google',
     info: [
