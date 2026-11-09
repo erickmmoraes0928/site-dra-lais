@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dra. Lais Azevedo · Saúde Mental</title>
+  <meta name="description" content="Médica · Saúde mental com evidências. CRM-RJ 521381560. Agende sua avaliação médica pelo WhatsApp.">
+  <meta name="theme-color" content="#FEE6CE">
+  <link rel="icon" href="assets/monograma-floresta.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="componentes.css">
+  <link rel="stylesheet" href="animacoes.css">
+  <style>
+    /* Ilustrações nos cantos livres do desktop (fora da coluna de leitura) */
+    .canto-desktop { display: none; }
+    @media (min-width: 1000px) {
+      .canto-desktop { display: block; position: fixed; pointer-events: none; z-index: 0; }
+      .canto-desktop--a { left: 0; bottom: 0; width: 260px; }
+      .canto-desktop--b { right: 32px; top: 40px; width: 110px; }
+    }
+    main, header, footer { position: relative; z-index: 1; }
+    .perfil-acoes { display: grid; gap: var(--esp-4); margin-top: var(--esp-5); }
+  </style>
+</head>
+<body id="topo">
+  <a class="pular-link" href="#links">Pular para os links</a>
+  <div class="canto-desktop canto-desktop--a" aria-hidden="true"></div>
+  <div class="canto-desktop canto-desktop--b" aria-hidden="true"></div>
+  <div id="app" class="coluna"></div>
+
+  <script src="icones.js"></script>
+  <script src="componentes.js"></script>
+  <script src="animacoes.js"></script>
+  <script src="conteudo.js"></script>
+  <script>
+  (function () {
+    const C = window.DL_CONTEUDO;
+    const wa = (msg) => DL.linkWhatsApp(C.contato.whatsappNumero, msg || C.contato.mensagemPadrao);
+    if (!C.mostrarMarcasDeExemplo) document.body.classList.add('sem-marcas-exemplo');
+
+    document.querySelector('.canto-desktop--a').innerHTML = DL.ilustracaoSvg('colinas');
+    document.querySelector('.canto-desktop--b').innerHTML = DL.ilustracaoSvg('sol');
+
+    const links = C.links.map((l) => {
+      if (l.tipo === 'whatsapp') return DL.linkBotao({ ...l, href: wa(), externo: true, attrs: { id: 'cta-principal' } });
+      if (l.tipo === 'modal') return DL.linkBotao({ ...l, attrs: { 'data-abrir-modal': l.modal } });
+      return DL.linkBotao(l);
+    }).join('');
+
+    const redes = C.redes.map((r) => ({ ...r, href: r.href === 'whatsapp' ? wa() : r.href }));
+
+    const conteudos = DL.abas({
+      rotulo: 'Tipos de conteúdo',
+      abas: [
+        { rotulo: 'Reels', html: DL.listaConteudos(C.conteudos.reels) },
+        { rotulo: 'Carrosséis', html: DL.listaConteudos(C.conteudos.carrosseis) },
+        { rotulo: 'Guias', html: DL.listaConteudos(C.conteudos.guias) }
+      ]
+    });
+
+    const contatos = [
+      { icone: 'whatsapp', rotulo: 'WhatsApp', valor: C.contato.whatsapp, href: wa(), copiar: C.contato.whatsapp },
+      { icone: 'instagram', rotulo: 'Instagram', valor: C.contato.instagram, href: C.contato.instagramUrl },
+      { icone: 'email', rotulo: 'E-mail', valor: C.contato.email, href: 'mailto:' + C.contato.email, exemplo: C.contato.emailExemplo }
+    ];
+
+    const modalConsulta = DL.modal({
+      id: 'modal-consulta', eyebrow: 'Avaliação médica', titulo: 'Como funciona a *consulta*',
+      html: `<p>A primeira consulta é uma conversa sem pressa sobre o que você carrega hoje: sono, rotina, trabalho, relações e histórico de saúde.</p>
+             <p>A partir dela, construímos juntas um plano de cuidado possível para a sua vida real, com condutas baseadas em evidências.</p>
+             <p>Os retornos acompanham como você está e ajustam o caminho. A teleconsulta segue os mesmos cuidados do atendimento presencial.</p>
+             <p>${DL.exemplo('texto de exemplo · revisar com a Dra. Lais')}</p>`,
+      rodape: DL.botao({ variante: 'secundario', texto: 'Fechar', attrs: { 'data-fechar-modal': '' } }) + DL.botaoWhatsApp({ numero: C.contato.whatsappNumero, mensagem: C.contato.mensagemPadrao, tamanho: 'p' })
+    });
+
+    document.getElementById('app').innerHTML = `
+      ${DL.perfil(C.perfil)}
+      <div class="perfil-acoes">${DL.redes(redes)}</div>
+
+      <main>
+        <nav id="links" aria-label="Links principais" class="pilha-links" style="margin-top:var(--esp-5)">${links}</nav>
+
+        <section class="secao" aria-labelledby="t-temas">
+          ${DL.secaoCabecalho({ id: 't-temas', eyebrow: 'O que eu cuido', titulo: 'Para quem funciona e quer *viver*' })}
+          ${DL.gradeTemas(C.temas)}
+        </section>
+
+        <section class="secao" aria-labelledby="t-sobre" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-sobre', eyebrow: 'Sobre mim', titulo: 'Prazer, Lais' })}
+          ${DL.sobreMim(C.sobre)}
+        </section>
+
+        <section class="secao" aria-labelledby="t-formacao" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-formacao', eyebrow: 'Formação', titulo: 'Ciência, com *presença*' })}
+          ${DL.formacao(C.formacao)}
+        </section>
+
+        <section class="secao" id="agendar" aria-labelledby="t-agendar" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-agendar', eyebrow: 'Agendamento', titulo: 'Vamos marcar sua *avaliação*', intro: 'O horário é combinado pelo WhatsApp. Se preferir, preencha o formulário e a mensagem sai pronta.' })}
+          ${DL.comoAgendar({ ...C.agendar, numero: C.contato.whatsappNumero, mensagem: C.contato.mensagemPadrao })}
+          <div class="cartao" style="margin-top:var(--esp-4)">
+            <h3 class="t-h4" style="margin:0 0 var(--esp-4)">Pré-agendamento</h3>
+            ${DL.formularioAgendamento({ numero: C.contato.whatsappNumero, pagamentos: C.pagamentos })}
+          </div>
+        </section>
+
+        <section class="secao" id="conteudos" aria-labelledby="t-conteudos" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-conteudos', eyebrow: 'Links úteis', titulo: 'Conteúdos para *guardar*' })}
+          ${conteudos}
+          <div style="margin-top:var(--esp-5)">${DL.serie(C.conteudos.serie)}</div>
+        </section>
+
+        <section class="secao" id="local" aria-labelledby="t-local" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-local', eyebrow: 'Onde atendo', titulo: 'Consultório e *teleconsulta*' })}
+          ${DL.local(C.local)}
+          <div style="margin-top:var(--esp-5)">${DL.convenios(C.convenios)}</div>
+        </section>
+
+        <section class="secao" aria-labelledby="t-faq" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-faq', eyebrow: 'Perguntas', titulo: 'Perguntas *frequentes*', intro: C.faqExemplo ? DL.exemplo('respostas de exemplo · revisar com a Dra. Lais') : '', introHtml: true })}
+          ${DL.acordeao({ itens: C.faq, unico: true })}
+        </section>
+
+        <section class="secao" aria-labelledby="t-contato" style="padding-top:0">
+          ${DL.secaoCabecalho({ id: 't-contato', eyebrow: 'Contato', titulo: 'Fale com a *equipe*' })}
+          ${DL.contatos(contatos)}
+          <div style="margin-top:var(--esp-5)">${DL.avisoCrise()}</div>
+        </section>
+      </main>
+
+      ${DL.rodape({ ...C.rodape, nome: C.perfil.nome, titulo: C.perfil.titulo, registro: C.perfil.registro, monograma: 'assets/monograma-floresta.svg', endereco: C.local.endereco + ', ' + C.local.complemento, exemplo: C.local.exemplo })}
+      ${DL.flutuante({ numero: C.contato.whatsappNumero, mensagem: C.contato.mensagemPadrao, observar: '#cta-principal', ocultarEm: '#agendar' })}
+      ${modalConsulta}
+    `;
+    DL.iniciar(document);
+    DL.iniciarMovimento(document);
+
+    // Primeira carga: foto desfoca para nítida, depois cascata de 70 ms
+    document.querySelector('.perfil__foto').classList.add('entrada-foto');
+    DL.cascata(document.querySelectorAll('.perfil > :not(.perfil__foto), .perfil-acoes, #links > *'), 1);
+    document.querySelectorAll('.canto-desktop').forEach((c) => c.classList.add('nascer'));
+
+    // Ao rolar: cada bloco aparece uma vez; itens de grade em cascata curta
+    DL.revelar(document.querySelectorAll('main .secao__cabecalho, .sobre, .linha-tempo__item, main .cartao, .local, .serie, .acordeao, .contatos, .aviso-crise, .rodape'));
+    document.querySelectorAll('.grade-temas > *, .lista-conteudos > *, .convenios > li').forEach((el, i, arr) => el.style.setProperty('--i', i % 4));
+    DL.revelar(document.querySelectorAll('.grade-temas > *, .convenios > li'));
+  })();
+  </script>
+</body>
+</html>

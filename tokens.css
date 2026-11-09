@@ -1,0 +1,201 @@
+/* ==========================================================================
+   Dra. Lais Azevedo · Tokens de design
+   Fonte de verdade: DNA Criativo v2.1 (Ref/DNA.pdf), paleta Sol & Sálvia.
+   Todos os componentes usam só estes tokens. Para mudar a marca, mude aqui.
+   ========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap");
+
+:root {
+  /* ---------- Paleta Sol & Sálvia (proporção 60 / 25 / 15) ---------- */
+  /* Base · 60% */
+  --cor-creme-sol: #FEE6CE;   /* fundo principal */
+  --cor-marfim:    #FFF3E4;   /* fundo de leitura, campos, cartões */
+  --cor-pessego:   #FCC697;   /* cartões e faixas */
+  /* Calma · 25% */
+  --cor-salvia:    #A8BCB0;   /* respiro */
+  --cor-oliva:     #5C612B;   /* acolhimento */
+  --cor-floresta:  #2A433D;   /* texto e fundo escuro */
+  /* Energia · 15% (tempero, não prato principal) */
+  --cor-laranja-sol: #EE6926; /* botão de destaque, número, sol. Nunca texto sobre claro */
+  --cor-terracota:   #BF3727; /* ênfase e rótulos. Só acento, nunca fundo cheio */
+  --cor-tijolo:      #912319; /* profundidade. Só acento */
+
+  /* Derivadas (calculadas para contraste, ver catálogo) */
+  --cor-floresta-suave: #435650; /* texto secundário: 5,0:1 sobre Pêssego, 7,4:1 sobre Creme */
+  --cor-floresta-profunda: #1F332E; /* hover sobre Floresta */
+  --cor-borda-campo: #7F897F;    /* borda de campo: 3,3:1 sobre Marfim (WCAG 1.4.11) */
+  --cor-laranja-claro: #F27A3D;  /* hover do botão de destaque (aumenta o contraste) */
+
+  /* ---------- Papéis semânticos (superfície clara, padrão) ---------- */
+  --fundo:                var(--cor-creme-sol);
+  --fundo-leitura:        var(--cor-marfim);
+  --superficie:           var(--cor-marfim);
+  --superficie-destaque:  var(--cor-pessego);
+  --superficie-calma:     var(--cor-salvia);
+  --superficie-escura:    var(--cor-floresta);
+
+  --texto:            var(--cor-floresta);
+  --texto-suave:      var(--cor-floresta-suave);
+  --texto-invertido:  var(--cor-creme-sol);
+  --texto-enfase:     var(--cor-terracota);   /* itálico de ênfase, eyebrows */
+
+  --borda-sutil:   rgba(42, 67, 61, 0.14);
+  --borda:         rgba(42, 67, 61, 0.28);
+  --borda-campo:   var(--cor-borda-campo);
+  --borda-forte:   var(--cor-floresta);
+
+  --acao:             var(--cor-floresta);
+  --acao-hover:       var(--cor-oliva);
+  --acao-pressionada: var(--cor-floresta-profunda);
+  --acao-texto:       var(--cor-creme-sol);
+  --acao-destaque:        var(--cor-laranja-sol);
+  --acao-destaque-hover:  var(--cor-laranja-claro);
+  --acao-destaque-texto:  var(--cor-floresta);
+
+  --foco: var(--cor-floresta);
+  --foco-anel: 0 0 0 2px var(--fundo), 0 0 0 4px var(--foco);
+
+  /* Feedback (vermelho só em texto, ícone e borda; nunca fundo cheio) */
+  --feedback-sucesso: var(--cor-oliva);
+  --feedback-info:    var(--cor-floresta);
+  --feedback-atencao: var(--cor-laranja-sol);  /* só ícone e barra, nunca texto */
+  --feedback-erro:    var(--cor-terracota);
+  --feedback-fundo:   var(--cor-marfim);
+
+  /* Cor por assunto (DNA 5.7): ansiedade Pêssego · depressão Sálvia ·
+     rotina Creme/Marfim · acolhimento Oliva ou Floresta */
+  --assunto-ansiedade: var(--cor-pessego);
+  --assunto-sono:      var(--cor-floresta);
+  --assunto-rotina:    var(--cor-salvia);
+  --assunto-exaustao:  var(--cor-oliva);
+  --assunto-perguntas: var(--cor-marfim);
+
+  /* ---------- Tipografia ---------- */
+  --fonte-display: "Cormorant Garamond", "Cormorant", Georgia, "Times New Roman", serif;
+  --fonte-texto:   "DM Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-codigo:  ui-monospace, "SF Mono", Menlo, Consolas, monospace; /* só no catálogo */
+
+  --peso-light: 300;
+  --peso-regular: 400;
+  --peso-medium: 500;
+
+  /* Escala (mínimo 13 px, DNA 5.4) */
+  --fs-rotulo:   0.8125rem; /* 13 · eyebrow, caixa alta espaçada */
+  --fs-legenda:  0.875rem;  /* 14 */
+  --fs-pequeno:  0.9375rem; /* 15 */
+  --fs-corpo:    1.0625rem; /* 17 */
+  --fs-lead:     1.25rem;   /* 20 */
+  --fs-h4:       1.5rem;    /* 24 · Cormorant a partir daqui */
+  --fs-h3:       1.875rem;  /* 30 */
+  --fs-h2:       2.375rem;  /* 38 */
+  --fs-h1:       3rem;      /* 48 */
+  --fs-display:  3.75rem;   /* 60 */
+
+  --lh-justo: 1.1;
+  --lh-titulo: 1.2;
+  --lh-corpo: 1.55;
+  --ls-rotulo: 0.18em;
+
+  /* ---------- Espaçamento (base 4) ---------- */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 24px;
+  --esp-6: 32px;
+  --esp-7: 48px;
+  --esp-8: 64px;
+  --esp-9: 96px;
+
+  --coluna: 480px;      /* coluna estilo Linktree */
+  --gutter: 20px;
+  --toque-min: 44px;    /* área mínima de toque */
+
+  /* ---------- Raios ---------- */
+  --raio-xs: 4px;
+  --raio-sm: 8px;
+  --raio-md: 14px;
+  --raio-lg: 22px;
+  --raio-pill: 999px;
+
+  /* ---------- Sombras (macias e quentes) ---------- */
+  --sombra-1: 0 1px 2px rgba(66, 44, 31, 0.06), 0 2px 8px rgba(66, 44, 31, 0.05);
+  --sombra-2: 0 2px 6px rgba(66, 44, 31, 0.07), 0 10px 28px rgba(66, 44, 31, 0.08);
+  --sombra-3: 0 6px 16px rgba(66, 44, 31, 0.10), 0 24px 60px rgba(42, 67, 61, 0.18);
+
+  /* ---------- Movimento (princípios de Emil Kowalski) ----------
+     · ease-out para tudo que entra ou sai (responde rápido, assenta devagar)
+     · ease-in-out só para o que já está na tela e muda de lugar
+     · nunca ease-in em UI; nada acima de 300 ms em interação comum
+     · só transform e opacity (e filter leve); nunca scale(0) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-folha: cubic-bezier(0.32, 0.72, 0, 1);   /* curva do Vaul, para folhas e flutuantes */
+  --curva: var(--ease-out);
+  --dur-toque: 160ms;     /* feedback de pressão */
+  --dur-rapida: 150ms;    /* hover, troca de cor */
+  --dur: 220ms;           /* padrão de UI */
+  --dur-lenta: 300ms;     /* modal, accordion */
+  --dur-folha: 500ms;     /* folha inferior, flutuante */
+  --dur-entrada: 500ms;   /* só na primeira carga da página */
+  --escala-toque: 0.97;
+  --escala-entrada: 0.96;
+
+  /* ---------- Textura: grão de papel ~4% (DNA 5.5) ---------- */
+  --textura-grao: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .26 0 0 0 0 .17 0 0 0 0 .12 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+
+  --z-flutuante: 40;
+  --z-toast: 60;
+  --z-tooltip: 70;
+}
+
+/* ---------- Superfície escura (Floresta) ----------
+   Aplique .superficie-floresta a qualquer bloco para remapear os papéis. */
+.superficie-floresta {
+  --fundo: var(--cor-floresta);
+  --fundo-leitura: var(--cor-floresta);
+  --superficie: #33504A;
+  --texto: var(--cor-creme-sol);
+  --texto-suave: #D9CBB8;
+  --texto-enfase: var(--cor-pessego);
+  --borda-sutil: rgba(254, 230, 206, 0.16);
+  --borda: rgba(254, 230, 206, 0.32);
+  --borda-campo: var(--cor-salvia);
+  --borda-forte: var(--cor-creme-sol);
+  --acao: var(--cor-creme-sol);
+  --acao-hover: var(--cor-marfim);
+  --acao-pressionada: var(--cor-pessego);
+  --acao-texto: var(--cor-floresta);
+  --foco: var(--cor-creme-sol);
+  --foco-anel: 0 0 0 2px var(--cor-floresta), 0 0 0 4px var(--cor-creme-sol);
+  background-color: var(--fundo);
+  color: var(--texto);
+}
+
+/* Pêssego: Terracota cai para 3,6:1, então a ênfase pequena vira Tijolo (5,6:1). */
+.superficie-pessego {
+  --fundo: var(--cor-pessego);
+  --superficie: var(--cor-marfim);
+  --texto-enfase: var(--cor-tijolo);
+  --foco-anel: 0 0 0 2px var(--cor-pessego), 0 0 0 4px var(--cor-floresta);
+  background-color: var(--fundo);
+  color: var(--texto);
+}
+/* Sálvia: Terracota (2,8:1) e texto suave não passam; ênfase vira Floresta. */
+.superficie-salvia {
+  --fundo: var(--cor-salvia);
+  --superficie: var(--cor-marfim);
+  --texto-suave: var(--cor-floresta);
+  --texto-enfase: var(--cor-floresta);
+  --borda-campo: var(--cor-floresta);
+  --foco-anel: 0 0 0 2px var(--cor-salvia), 0 0 0 4px var(--cor-floresta);
+  background-color: var(--fundo);
+  color: var(--texto);
+}
+
+/* Reduzir movimento não é zero movimento: mantém fades curtos,
+   tira deslocamento e escala (ver animacoes.css). */
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-folha: 220ms; --dur-entrada: 200ms; --escala-toque: 1; --escala-entrada: 1; }
+}

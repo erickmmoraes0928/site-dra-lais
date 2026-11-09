@@ -1,0 +1,281 @@
+/* ==========================================================================
+   Dra. Lais Azevedo · Camada de movimento
+   Princípios de design engineering de Emil Kowalski (Sonner, Vaul):
+   1. ease-out para entrar/sair; ease-in-out para mover o que já está na tela.
+   2. Rápido: 150–300 ms em interações; entradas longas só na primeira carga.
+   3. Só transform, opacity e filter leve (GPU, sem reflow).
+   4. Nada nasce de scale(0): parte de 0,96 com opacity 0.
+   5. Origem coerente: o tooltip cresce a partir do gatilho.
+   6. Transições (interrompíveis) em vez de keyframes para estados que vão e voltam.
+   7. Todo toque tem resposta: scale(0,97) ao pressionar.
+   8. Hover que move só em dispositivo com mouse.
+   9. A saída é mais rápida que a entrada.
+  10. Reduzir movimento: mantém fades, tira deslocamento.
+   Carregue depois de componentes.css.
+   ========================================================================== */
+
+/* ---------- 7. Feedback de pressão ---------- */
+.btn { transition-property: background-color, color, border-color, box-shadow, transform; transition-duration: var(--dur-rapida), var(--dur-rapida), var(--dur-rapida), var(--dur), var(--dur-toque); transition-timing-function: var(--ease-out); }
+.btn:active:not(:disabled):not([aria-disabled="true"]):not([aria-busy="true"]),
+.btn.is-pressionado { transform: scale(var(--escala-toque)); }
+.btn--destaque:active:not(:disabled) { box-shadow: none; }
+
+.link-botao { transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out), border-color var(--dur-rapida) var(--ease-out), background-color var(--dur-rapida) var(--ease-out); }
+.link-botao:active:not([aria-disabled="true"]), .link-botao.is-pressionado { transform: scale(0.985); transition-duration: var(--dur-toque); }
+.redes a { transition: background-color var(--dur-rapida) var(--ease-out), color var(--dur-rapida) var(--ease-out), border-color var(--dur-rapida) var(--ease-out), transform var(--dur-toque) var(--ease-out); }
+.redes a:active { transform: scale(0.92); }
+.chip span { transition: background-color var(--dur-rapida) var(--ease-out), border-color var(--dur-rapida) var(--ease-out), color var(--dur-rapida) var(--ease-out), transform var(--dur-toque) var(--ease-out), padding var(--dur) var(--ease-out); }
+.chip:active span { transform: scale(0.95); }
+.cartao-tema:active, .cartao-conteudo:active, .serie__item a:active { transform: scale(0.98); transition-duration: var(--dur-toque); }
+.acordeao__botao { transition: background-color var(--dur-rapida) var(--ease-out); }
+.acordeao__botao:active { background: var(--borda-sutil); }
+
+/* ---------- 8. Hover que move: só com mouse ---------- */
+@media (hover: none), (pointer: coarse) {
+  .link-botao:hover, a.cartao-tema:hover, .cartao-conteudo:hover, .serie__item a:hover { transform: none; box-shadow: var(--sombra-1); }
+  .link-botao:hover .link-botao__seta { transform: none; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-botao .link-botao__icone { transition: transform var(--dur-lenta) var(--ease-out); }
+  .link-botao:hover .link-botao__icone { transform: scale(1.06) rotate(-3deg); }
+  .cartao-tema .icone { transition: transform 600ms var(--ease-out); }
+  .cartao-tema--ansiedade:hover .icone { transform: rotate(-35deg); }
+  .cartao-tema--sono:hover .icone { transform: rotate(-14deg) translateY(-2px); }
+  .cartao-tema--rotina:hover .icone { transform: translateY(-4px); }
+  .cartao-tema--exaustao:hover .icone { transform: translateX(3px); }
+  .cartao-tema--perguntas:hover .icone { transform: rotate(-8deg) scale(1.05); }
+  .cartao-conteudo__miniatura .icone { transition: transform 500ms var(--ease-out); }
+  .cartao-conteudo:hover .cartao-conteudo__miniatura .icone { transform: scale(1.12); }
+  .grupo-avatares .avatar { transition: transform var(--dur) var(--ease-out); }
+  .grupo-avatares .avatar:hover { transform: translateY(-3px); z-index: 1; }
+  .btn--discreto .icone:last-child { transition: transform var(--dur) var(--ease-out); }
+  .btn--discreto:hover > .btn__conteudo > .icone:last-child { transform: translateX(3px); }
+}
+
+/* ---------- Botão carregando: troca com desfoque (crossfade) ---------- */
+.btn .btn__conteudo,
+.btn .btn__carregando { transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out), filter var(--dur) var(--ease-out); }
+.btn .btn__carregando { display: flex; opacity: 0; transform: scale(0.6); filter: blur(4px); pointer-events: none; }
+.btn[aria-busy="true"] .btn__carregando { opacity: 1; transform: none; filter: none; }
+.btn[aria-busy="true"] .btn__conteudo { visibility: visible; opacity: 0; transform: scale(0.92); filter: blur(4px); }
+
+/* ---------- Troca de ícone (copiar → check) ---------- */
+.icone-troca { position: relative; display: grid; width: 1.25em; height: 1.25em; }
+.icone-troca .icone { grid-area: 1 / 1; transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out), filter var(--dur) var(--ease-out); }
+.icone-troca .icone:last-child { opacity: 0; transform: scale(0.5); filter: blur(4px); }
+.is-copiado .icone-troca .icone:first-child { opacity: 0; transform: scale(0.5); filter: blur(4px); }
+.is-copiado .icone-troca .icone:last-child { opacity: 1; transform: none; filter: none; stroke-width: 2; }
+
+/* ---------- Checkbox: o check é "desenhado" da esquerda para a direita ---------- */
+.opcao input[type="checkbox"]::after {
+  clip-path: none;
+  width: 14px; height: 14px; transform: none;
+  background: var(--cor-creme-sol);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 12.5 5 5L19.5 7'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 12.5 5 5L19.5 7'/%3E%3C/svg%3E") center / contain no-repeat;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path var(--dur) var(--ease-out);
+}
+.opcao input[type="checkbox"]:checked::after { clip-path: inset(0 0 0 0); transform: none; }
+.opcao input { transition: background-color var(--dur-rapida) var(--ease-out), border-color var(--dur-rapida) var(--ease-out), transform var(--dur-toque) var(--ease-out); }
+.opcao:active input:not(:disabled) { transform: scale(0.9); }
+/* Radio: o ponto parte de 0,4, não de zero */
+.opcao input[type="radio"]::after { transform: scale(0.4); opacity: 0; transition: transform var(--dur) var(--ease-out), opacity var(--dur-rapida) var(--ease-out); }
+.opcao input[type="radio"]:checked::after { transform: scale(1); opacity: 1; }
+
+/* ---------- Switch: o polegar estica ao pressionar ---------- */
+.interruptor input::after { transition: transform var(--dur) var(--ease-out), width var(--dur) var(--ease-out), background-color var(--dur) var(--ease-out); }
+.interruptor:active input:not(:disabled)::after { width: 25px; }
+.interruptor:active input:checked:not(:disabled)::after { transform: translateX(14px); }
+
+/* ---------- Chips: o check surge no espaço já reservado (sem animar largura) ---------- */
+.chip span { padding-left: 12px; }
+.chip span .icone { display: block; width: 16px; opacity: 0; transform: scale(0.5); filter: blur(2px); transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out), filter var(--dur) var(--ease-out); }
+.chip input:checked + span .icone { opacity: 1; transform: none; filter: none; }
+
+/* ---------- 5. Tooltip: nasce do gatilho, atraso só na primeira ---------- */
+.tooltip__balao { transform-origin: 50% 100%; transform: translate(-50%, 3px) scale(0.97); transition: opacity 100ms var(--ease-out), transform 100ms var(--ease-out), visibility 100ms; }
+.tooltip--baixo .tooltip__balao { transform-origin: 50% 0; transform: translate(-50%, -3px) scale(0.97); }
+.tooltip:hover .tooltip__balao { transition-duration: 125ms; transition-delay: 350ms; transform: translate(-50%, 0) scale(1); }
+.tooltip:focus-within .tooltip__balao, .tooltip.is-aberto .tooltip__balao { transition-duration: 125ms; transition-delay: 0ms; transform: translate(-50%, 0) scale(1); }
+/* Com um tooltip recém-aberto, o próximo aparece na hora e sem animação */
+html[data-tooltip-aquecido] .tooltip:hover .tooltip__balao { transition-delay: 0ms; transition-duration: 0ms; }
+
+/* ---------- Accordion: altura com ease-in-out (já está na tela), conteúdo sobe ---------- */
+.acordeao__painel { transition: grid-template-rows var(--dur-lenta) var(--ease-in-out); }
+.acordeao__conteudo { opacity: 0; transform: translateY(-6px); transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); }
+.acordeao__botao[aria-expanded="true"] + .acordeao__painel .acordeao__conteudo { opacity: 1; transform: none; transition-delay: 60ms; }
+.acordeao__botao .icone { transition: transform var(--dur-lenta) var(--ease-out); }
+
+/* ---------- Abas: indicador desliza (ease-in-out, já está na tela) ---------- */
+.abas__lista { position: relative; }
+.abas__aba::after { display: none; }
+.abas__indicador {
+  position: absolute; left: 0; bottom: -1px; height: 2px; width: 1px;
+  background: var(--cor-laranja-sol);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  transition: transform 260ms var(--ease-in-out);
+}
+.abas__aba { transition: color var(--dur-rapida) ease; }
+.abas__painel:not([hidden]) { animation: painel-entrar var(--dur) var(--ease-out); }
+/* Navegação por teclado: sem animação (regra do "100 vezes por dia") */
+.abas.is-teclado .abas__indicador { transition: none; }
+.abas.is-teclado .abas__painel:not([hidden]) { animation: none; }
+@keyframes painel-entrar { from { opacity: 0; transform: translateY(6px); } }
+
+/* ---------- Alertas e erros ---------- */
+.alerta { animation: surgir var(--dur-lenta) var(--ease-out); }
+.campo.is-erro .campo__erro, .chips.is-erro .campo__erro { animation: surgir var(--dur) var(--ease-out); }
+@keyframes surgir { from { opacity: 0; transform: translateY(-4px); } }
+.is-tremendo { animation: tremer 380ms var(--ease-out); }
+@keyframes tremer { 0%, 100% { transform: none; } 20% { transform: translateX(-6px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+
+/* ---------- Status: ponto respira devagar ---------- */
+.badge--aberta .badge__ponto { position: relative; box-shadow: none; }
+.badge--aberta .badge__ponto::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: var(--cor-oliva); opacity: 0.5;
+  animation: respirar 2.6s var(--ease-out) infinite;
+}
+@keyframes respirar { 0% { transform: scale(1); opacity: 0.45; } 70%, 100% { transform: scale(2.6); opacity: 0; } }
+
+/* ---------- 9. Modal: entra em 300 ms, sai em 160 ms ---------- */
+.modal[open] { animation: modal-entrar var(--dur-lenta) var(--ease-out); }
+.modal::backdrop { animation: fade var(--dur-lenta) var(--ease-out); }
+@keyframes modal-entrar { from { opacity: 0; transform: scale(var(--escala-entrada)) translateY(8px); } }
+.modal.is-fechando { animation: modal-sair 160ms var(--ease-out) forwards; }
+.modal.is-fechando::backdrop { animation: fade-sair 160ms var(--ease-out) forwards; }
+@keyframes modal-sair { to { opacity: 0; transform: scale(0.98); } }
+@keyframes fade-sair { to { opacity: 0; } }
+
+/* Folha inferior (estilo Vaul): no celular sempre; em qualquer tela com .modal--folha */
+.modal__alca { display: none; justify-content: center; padding: 10px 0 0; cursor: grab; touch-action: none; }
+.modal__alca span { width: 40px; height: 5px; border-radius: 999px; background: var(--borda); }
+.modal--folha {
+  width: min(560px, 100vw); max-width: 100vw;
+  margin: auto auto 0;
+  border-radius: var(--raio-lg) var(--raio-lg) 0 0;
+  max-height: 90vh;
+}
+.modal--folha .modal__alca { display: flex; }
+.modal--folha[open] { animation: folha-entrar var(--dur-folha) var(--ease-folha); }
+.modal--folha.is-fechando { animation: folha-sair 280ms var(--ease-folha) forwards; }
+.modal--folha.is-arrastando { animation: none; transition: none; }
+.modal--folha.is-soltando { transition: transform var(--dur-folha) var(--ease-folha); }
+@media (max-width: 560px) {
+  .modal .modal__alca { display: flex; }
+  .modal[open] { animation: folha-entrar var(--dur-folha) var(--ease-folha); }
+  .modal.is-fechando { animation: folha-sair 280ms var(--ease-folha) forwards; }
+  .modal.is-arrastando { animation: none; transition: none; }
+  .modal.is-soltando { transition: transform var(--dur-folha) var(--ease-folha); }
+}
+@keyframes folha-entrar { from { transform: translateY(100%); } }
+@keyframes folha-sair { to { transform: translateY(100%); } }
+
+/* ---------- Toasts empilhados (estilo Sonner) ---------- */
+.toasts { display: block; height: 0; bottom: calc(24px + env(safe-area-inset-bottom)); }
+.toasts .toast {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  animation: none;
+  touch-action: none;
+  user-select: none;
+  --y: 0px; --s: 1;
+  transform: translateY(var(--y)) scale(var(--s));
+  transform-origin: 50% 100%;
+  /* Sonner: um pouco mais lento e com `ease`, que soa mais elegante */
+  transition: transform 400ms ease, opacity 400ms ease;
+}
+.toasts .toast[data-montado="false"] { transform: translateY(100%); opacity: 0; }
+.toasts .toast[data-oculto="true"] { opacity: 0; pointer-events: none; }
+.toasts .toast[data-saindo="true"] { transform: translateY(calc(100% + 24px)); opacity: 0; transition-duration: 220ms; }
+.toasts .toast[data-arrastando="true"] { transition: none; cursor: grabbing; }
+.toasts .toast::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 16px; } /* ponte para o hover entre toasts */
+
+/* ---------- Copiar: o botão fica verde-sálvia por um instante ---------- */
+.btn-copiar { transition: background-color var(--dur) var(--ease-out), color var(--dur) var(--ease-out), transform var(--dur-toque) var(--ease-out); }
+
+/* ---------- Sucesso do formulário: círculo cresce, check é desenhado ---------- */
+.formulario.is-enviado .formulario__sucesso > * { animation: subir 500ms var(--ease-out) both; }
+.formulario.is-enviado .formulario__sucesso > :nth-child(2) { animation-delay: 80ms; }
+.formulario.is-enviado .formulario__sucesso > :nth-child(3) { animation-delay: 140ms; }
+.formulario.is-enviado .formulario__sucesso > :nth-child(4) { animation-delay: 200ms; }
+.formulario.is-enviado .formulario__sucesso > :nth-child(n+5) { animation-delay: 260ms; }
+.formulario.is-enviado .icone-circulo { animation: crescer 500ms var(--ease-out) both; }
+.formulario.is-enviado .icone-circulo .icone path { stroke-dasharray: 24; stroke-dashoffset: 24; animation: desenhar 420ms 220ms var(--ease-out) forwards; }
+@keyframes subir { from { opacity: 0; transform: translateY(10px); filter: blur(2px); } }
+@keyframes crescer { from { opacity: 0; transform: scale(0.6); } }
+@keyframes desenhar { to { stroke-dashoffset: 0; } }
+
+/* ---------- Botão flutuante ----------
+   Entra e sai pelo mesmo caminho (continuidade espacial).
+   Saída: mais curta que a entrada, com opacidade, escala e desfoque
+   em sincronia; a visibility só vira no último quadro.
+   A transição usada é a do estado de destino: a regra "escondido"
+   descreve a saída; a regra "visível" descreve a entrada. */
+.flutuante:not(.flutuante--estatico) {
+  transform-origin: 50% 100%;
+  transform: translateY(calc(100% + 16px + env(safe-area-inset-bottom, 0px))) scale(0.96);
+  opacity: 0;
+  filter: blur(4px);
+  transition:
+    transform 280ms var(--ease-out),
+    opacity 280ms ease,
+    filter 280ms ease,
+    visibility 0s linear 280ms;
+}
+.flutuante.is-visivel:not(.flutuante--estatico) {
+  transform: none;
+  opacity: 1;
+  filter: none;
+  transition:
+    transform var(--dur-folha) var(--ease-folha),
+    opacity 320ms ease,
+    filter 320ms ease,
+    visibility 0s;
+}
+/* a sombra acompanha o botão em vez de "piscar" no fim */
+.flutuante .btn { transition-property: background-color, color, border-color, box-shadow, transform; }
+
+/* ---------- Entrada da página (só na primeira carga) ---------- */
+.js-anim .entrada {
+  animation: entrar var(--dur-entrada) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+}
+@keyframes entrar { from { opacity: 0; transform: translateY(12px); filter: blur(6px); } }
+.js-anim .entrada-foto { animation: entrar-foto 900ms var(--ease-out) both; }
+@keyframes entrar-foto { from { opacity: 0; transform: scale(0.94); filter: blur(8px); } }
+
+/* Revelar ao rolar (uma vez). Sem JS, nada fica escondido. */
+.js-anim .revelar { opacity: 0; transform: translateY(18px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); transition-delay: calc(var(--i, 0) * 60ms); }
+.js-anim .revelar.is-visivel { opacity: 1; transform: none; }
+
+/* Ilustrações: o sol nasce, a colina assenta */
+.js-anim .nascer { animation: nascer 1200ms 300ms var(--ease-out) both; }
+@keyframes nascer { from { opacity: 0; transform: translateY(40px); } }
+
+/* ---------- Skeleton: brilho mais suave ---------- */
+.skeleton { animation-duration: 1.8s; animation-timing-function: var(--ease-in-out); }
+
+/* ---------- Demonstração de curvas (catálogo) ---------- */
+.curva-pista { position: relative; height: 40px; border-radius: 999px; background: var(--cor-marfim); border: 1px solid var(--borda-sutil); overflow: hidden; }
+.curva-bola { position: absolute; left: 6px; top: 6px; width: 28px; height: 28px; border-radius: 50%; background: var(--cor-floresta); transform: translateX(0); }
+.curva-pista.is-rodando .curva-bola { transform: translateX(calc(var(--pista-w, 300px) - 40px)); }
+
+/* ---------- 10. Reduzir movimento: fica o fade, sai o deslocamento ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .js-anim .entrada, .js-anim .entrada-foto, .js-anim .nascer,
+  .formulario.is-enviado .formulario__sucesso > *, .formulario.is-enviado .icone-circulo,
+  .abas__painel:not([hidden]), .alerta, .campo.is-erro .campo__erro { animation-name: fade; }
+  .js-anim .revelar { transform: none; }
+  .is-tremendo { animation: none; }
+  .badge--aberta .badge__ponto::after { animation: none; opacity: 0; }
+  .modal[open], .modal--folha[open] { animation-name: fade; }
+  .modal.is-fechando { animation-name: fade-sair; }
+  .toasts .toast[data-montado="false"], .toasts .toast[data-saindo="true"] { transform: translateY(var(--y)) scale(var(--s)); }
+  .link-botao:hover .link-botao__icone, .cartao-tema:hover .icone, .link-botao:hover, a.cartao-tema:hover, .cartao-conteudo:hover { transform: none; }
+  .skeleton { animation: none; }
+  /* flutuante: só fade, sem deslocamento, escala ou desfoque */
+  .flutuante:not(.flutuante--estatico) { transform: none; filter: none; transition: opacity 200ms ease, visibility 0s linear 200ms; }
+  .flutuante.is-visivel:not(.flutuante--estatico) { transition: opacity 200ms ease, visibility 0s; }
+}
