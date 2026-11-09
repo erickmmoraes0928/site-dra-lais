@@ -191,7 +191,7 @@
       ['Erro', DL.opcao({ texto: 'Concordo com a política de privacidade', erro: true })]
     ], 200)}
     ${sub('Radio')}${grade([
-      ['Grupo', DL.grupoOpcoes({ legenda: 'Tipo de consulta', itens: [{ texto: 'Primeira consulta', valor: '1', marcado: true, descricao: 'Avaliação completa, sem pressa' }, { texto: 'Retorno', valor: '2' }, { texto: 'Indisponível', valor: '3', desabilitado: true }] })],
+      ['Grupo', DL.grupoOpcoes({ legenda: 'Tipo de consulta', itens: [{ texto: 'Primeira consulta', valor: '1', marcado: true, descricao: 'Consulta completa, sem pressa' }, { texto: 'Retorno', valor: '2' }, { texto: 'Indisponível', valor: '3', desabilitado: true }] })],
       ['Em linha', DL.grupoOpcoes({ legenda: 'Modalidade', linha: true, itens: [{ texto: 'Presencial', valor: 'p', marcado: true }, { texto: 'Teleconsulta', valor: 't' }] })],
       ['Foco', DL.opcao({ tipo: 'radio', texto: 'Retorno', estado: 'foco', nome: 'rf' })]
     ], 240)}
@@ -238,7 +238,7 @@
       <p class="t-legenda" style="margin-top:12px">Curva do Vaul (--ease-folha), 500 ms para subir e 280 ms para descer. Fecha por distância (25% da altura) ou velocidade.</p>`;
 
     const modal = `${DL.botao({ texto: 'Abrir modal', icone: 'xicara', attrs: { 'data-abrir-modal': 'demo-modal' } })}
-      ${DL.modal({ id: 'demo-modal', eyebrow: 'Avaliação médica', titulo: 'Como funciona a *consulta*', html: '<p>A primeira consulta é uma conversa sem pressa sobre o que você carrega hoje: sono, rotina, trabalho, relações e histórico de saúde.</p><p>Os retornos acompanham como você está e ajustam o caminho.</p>', rodape: DL.botao({ variante: 'secundario', texto: 'Fechar', attrs: { 'data-fechar-modal': '' } }) + DL.botaoWhatsApp({ numero: NUM, mensagem: MSG, tamanho: 'p' }) })}
+      ${DL.modal({ id: 'demo-modal', eyebrow: 'Consulta médica', titulo: 'Como funciona a *consulta*', html: '<p>A primeira consulta é uma conversa sem pressa sobre o que você carrega hoje: sono, rotina, trabalho, relações e histórico de saúde.</p><p>Os retornos acompanham como você está e ajustam o caminho.</p>', rodape: DL.botao({ variante: 'secundario', texto: 'Fechar', attrs: { 'data-fechar-modal': '' } }) + DL.botaoWhatsApp({ numero: NUM, mensagem: MSG, tamanho: 'p' }) })}
       <p class="t-legenda" style="margin-top:12px">Usa &lt;dialog&gt;: foco preso dentro, Esc fecha, clique fora fecha. No celular vira uma folha que sobe da base.</p>`;
 
     const abas = DL.abas({ rotulo: 'Exemplo de abas', abas: [

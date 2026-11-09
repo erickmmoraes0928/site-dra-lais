@@ -365,10 +365,12 @@
       <circle cx="60" cy="40" r="18" fill="#EE6926"/>
       <g transform="translate(166 66)"><path d="M18 52s-18-15.6-18-30.6a18 18 0 0 1 36 0C36 36.4 18 52 18 52Z" fill="#2A433D"/><circle cx="18" cy="21" r="6.5" fill="#FEE6CE"/></g></svg>`;
     const info = (l.info || []).map((i) => `<li>${ic(i.icone)}<div><strong>${esc(i.titulo)}</strong><br><span>${esc(i.texto)}</span>${i.exemplo ? ' ' + DL.exemplo() : ''}</div></li>`).join('');
+    // O mapa ilustrado também é um link para o Google Maps
+    const mapaTag = l.mapaHref ? `a href="${esc(l.mapaHref)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(l.nome || l.endereco)} no Google Maps (abre em nova aba)"` : 'div';
     return `<article class="cartao local">
-      <div class="local__mapa">${mapa}<span class="local__mapa-rotulo">${DL.exemplo('mapa ilustrativo')}</span></div>
+      <${mapaTag} class="local__mapa">${mapa}<span class="local__mapa-rotulo">${DL.exemplo('mapa ilustrativo')}</span></${l.mapaHref ? 'a' : 'div'}>
       <div class="local__corpo">
-        <div><p class="eyebrow">${esc(l.eyebrow || 'Consultório')}</p><p class="local__endereco">${esc(l.endereco)}</p><p class="t-legenda">${esc(l.complemento || '')} ${l.exemplo ? DL.exemplo() : ''}</p></div>
+        <div><p class="eyebrow">${esc(l.eyebrow || 'Consultório')}</p>${l.nome ? `<p class="local__endereco">${esc(l.nome)}</p><p class="t-pequeno" style="margin-top:4px">${esc(l.endereco)}</p>` : `<p class="local__endereco">${esc(l.endereco)}</p>`}<p class="t-legenda">${esc(l.complemento || '')} ${l.exemplo ? DL.exemplo() : ''}</p></div>
         <ul class="lista-info">${info}</ul>
         <div class="local__acoes">${DL.botao({ variante: 'secundario', icone: 'mapa', texto: 'Abrir no mapa', href: l.mapaHref, externo: true })}${l.modalidades ? l.modalidades.map((m) => DL.badge({ texto: m.texto, icone: m.icone, tom: 'contorno' })).join('') : ''}</div>
       </div></article>`;
@@ -548,7 +550,7 @@
       const marcados = (n) => [...form.querySelectorAll(`input[name="${n}"]:checked`)].map((i) => i.value);
       const tipo = form.querySelector('fieldset.grupo-opcoes input:checked')?.value || 'Primeira consulta';
       const linhas = [
-        `Olá, Dra. Lais! Gostaria de agendar uma avaliação médica.`,
+        `Olá, Dra. Lais! Gostaria de agendar uma consulta médica.`,
         ``,
         `Nome: ${campo('nome').value.trim()}`,
         `Consulta: ${tipo}${campo('teleconsulta').checked ? ' (teleconsulta)' : ''}`,
@@ -584,7 +586,7 @@
         btn.removeAttribute('aria-busy'); btn.disabled = false;
         if (form.hasAttribute('data-simular-erro') && !form.dataset.tentou) {
           form.dataset.tentou = '1';
-          alerta.innerHTML = DL.alerta({ tipo: 'erro', titulo: 'Não conseguimos preparar a mensagem', html: `Tente de novo ou <a href="${DL.linkWhatsApp(numero, 'Olá, Dra. Lais! Gostaria de agendar uma avaliação médica.')}" target="_blank" rel="noopener">chame direto no WhatsApp</a>.` });
+          alerta.innerHTML = DL.alerta({ tipo: 'erro', titulo: 'Não conseguimos preparar a mensagem', html: `Tente de novo ou <a href="${DL.linkWhatsApp(numero, 'Olá, Dra. Lais! Gostaria de agendar uma consulta médica.')}" target="_blank" rel="noopener">chame direto no WhatsApp</a>.` });
           alerta.querySelector('.alerta')?.setAttribute('tabindex', '-1');
           alerta.querySelector('.alerta')?.focus();
           return;

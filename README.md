@@ -5,7 +5,7 @@ Site de apresentação profissional no estilo Linktree para a Dra. Lais Azevedo,
 - **Site:** `index.html`
 - **Biblioteca de componentes:** `biblioteca.html`, com fundamentos (cores, tipografia, espaçamento, ícones, movimento), componentes básicos e componentes do site, cada um com variantes e estados.
 
-Publicado com autorização da Dra. Lais. Itens marcados como "exemplo" (endereço, convênios, parte da formação, e-mail e respostas do FAQ) são fictícios. Os retratos são imagens ilustrativas.
+Publicado com autorização da Dra. Lais. Itens marcados como "exemplo" (convênios, detalhes do consultório, parte da formação, e-mail e respostas do FAQ) são fictícios. Os retratos são imagens ilustrativas.
 
 ## Como funciona
 

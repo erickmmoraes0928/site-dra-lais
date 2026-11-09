@@ -850,6 +850,7 @@ a.cartao-tema:hover, .cartao-tema.is-hover { transform: translateY(-2px); box-sh
 /* ---------- Local de atendimento ---------- */
 .local { padding: 0; overflow: hidden; }
 .local__mapa {
+  display: block;
   position: relative; aspect-ratio: 16 / 9;
   background: var(--cor-salvia);
   overflow: hidden;

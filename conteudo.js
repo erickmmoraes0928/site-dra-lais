@@ -10,7 +10,7 @@ window.DL_CONTEUDO = {
   contato: {
     whatsapp: '(22) 98823-0320',
     whatsappNumero: '22988230320',
-    mensagemPadrao: 'Olá, Dra. Lais! Gostaria de agendar uma avaliação médica.',
+    mensagemPadrao: 'Olá, Dra. Lais! Gostaria de agendar uma consulta médica.',
     instagram: '@laisazeved0',
     instagramUrl: 'https://instagram.com/laisazeved0',
     email: 'contato@dralaisazevedo.com.br',  // exemplo: trocar pelo real
@@ -31,7 +31,7 @@ window.DL_CONTEUDO = {
 
   links: [
     { titulo: 'Agende no WhatsApp', subtitulo: 'Horários combinados direto com a equipe', icone: 'whatsapp', destaque: true, tipo: 'whatsapp' },
-    { titulo: 'Como funciona a consulta', subtitulo: 'Primeira avaliação, retorno e teleconsulta', icone: 'xicara', tipo: 'modal', modal: 'modal-consulta' },
+    { titulo: 'Como funciona a consulta', subtitulo: 'Primeira consulta, retorno e teleconsulta', icone: 'xicara', tipo: 'modal', modal: 'modal-consulta' },
     { titulo: 'Conteúdos para guardar', subtitulo: 'Reels, carrosséis e guias', icone: 'folha', href: '#conteudos', tom: 'pessego' },
     { titulo: 'Instagram', subtitulo: '@laisazeved0', icone: 'instagram', href: 'https://instagram.com/laisazeved0', externo: true },
     { titulo: 'Onde atendo', subtitulo: 'Consultório e teleconsulta', icone: 'local', href: '#local' }
@@ -79,7 +79,7 @@ window.DL_CONTEUDO = {
     passos: [
       { titulo: 'Envie uma mensagem', texto: 'Pelo botão abaixo ou pelo formulário, que já monta o texto para você.' },
       { titulo: 'Receba os horários', texto: 'A equipe responde com os horários disponíveis na semana.' },
-      { titulo: 'Confirme a avaliação', texto: 'Você escolhe o melhor horário e recebe a confirmação.' }
+      { titulo: 'Confirme a consulta', texto: 'Você escolhe o melhor horário e recebe a confirmação.' }
     ],
     nota: 'Respondemos em horário comercial.',
     notaExemplo: true
@@ -112,10 +112,11 @@ window.DL_CONTEUDO = {
 
   local: {
     eyebrow: 'Consultório',
-    endereco: 'Rua das Palmeiras, 120, sala 304',
-    complemento: 'Centro, Macaé · RJ',
-    exemplo: true,
-    mapaHref: 'https://maps.google.com/?q=Macae+RJ',
+    nome: 'Íntegra · Instituto de Saúde Integrativa',
+    endereco: 'R. Pastor Abelar Suzano de Siqueira, 157',
+    complemento: 'Pres. Costa e Silva, Itaperuna · RJ, 28300-000',
+    exemplo: false,
+    mapaHref: 'https://maps.app.goo.gl/oZLL1FFkyvNhZmwF7',
     info: [
       { icone: 'acessibilidade', titulo: 'Acessibilidade', texto: 'Prédio com elevador e rampa de acesso.', exemplo: true },
       { icone: 'estacionamento', titulo: 'Estacionamento', texto: 'Estacionamento rotativo em frente.', exemplo: true },
