@@ -856,6 +856,23 @@ a.cartao-tema:hover, .cartao-tema.is-hover { transform: translateY(-2px); box-sh
   overflow: hidden;
 }
 .local__mapa svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.local__mapa--real { background: #F2F2F2; text-decoration: none; color: var(--cor-floresta); }
+.local__mapa--real img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+.local__mapa-credito {
+  position: absolute; right: 6px; bottom: 4px;
+  font-size: 0.6875rem; line-height: 1.4; color: #5F6368;
+  background: rgba(255, 255, 255, 0.8); padding: 0 4px; border-radius: 3px;
+}
+.local__mapa-acao {
+  position: absolute; left: 12px; bottom: 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: var(--raio-pill);
+  background: var(--cor-marfim); color: var(--cor-floresta);
+  font-size: var(--fs-legenda); font-weight: var(--peso-medium);
+  box-shadow: var(--sombra-1);
+}
+.local__mapa .local__mapa-acao .icone { position: static; width: 14px; height: 14px; }
+.local__mapa:focus-visible { box-shadow: inset 0 0 0 3px var(--foco); border-radius: 0; }
 .local__mapa-rotulo { position: absolute; left: 12px; top: 12px; }
 .local__mapa-rotulo .marca-exemplo { background: var(--cor-marfim); }
 .local__corpo { padding: var(--esp-5); display: grid; gap: var(--esp-4); }

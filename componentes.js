@@ -368,7 +368,9 @@
     // O mapa ilustrado também é um link para o Google Maps
     const mapaTag = l.mapaHref ? `a href="${esc(l.mapaHref)}" target="_blank" rel="noopener" aria-label="Abrir ${esc(l.nome || l.endereco)} no Google Maps (abre em nova aba)"` : 'div';
     return `<article class="cartao local">
-      <${mapaTag} class="local__mapa">${mapa}<span class="local__mapa-rotulo">${DL.exemplo('mapa ilustrativo')}</span></${l.mapaHref ? 'a' : 'div'}>
+      <${mapaTag} class="${cls('local__mapa', l.mapaImagem && 'local__mapa--real')}">${l.mapaImagem
+        ? `<img src="${esc(l.mapaImagem)}" alt="${esc(l.mapaAlt || 'Mapa do local de atendimento')}" loading="lazy" decoding="async"><span class="local__mapa-credito">${esc(l.mapaCredito || '© Google')}</span><span class="local__mapa-acao" aria-hidden="true">${ic('externo')}Ver no Google Maps</span>`
+        : `${mapa}<span class="local__mapa-rotulo">${DL.exemplo('mapa ilustrativo')}</span>`}</${l.mapaHref ? 'a' : 'div'}>
       <div class="local__corpo">
         <div><p class="eyebrow">${esc(l.eyebrow || 'Consultório')}</p>${l.nome ? `<p class="local__endereco">${esc(l.nome)}</p><p class="t-pequeno" style="margin-top:4px">${esc(l.endereco)}</p>` : `<p class="local__endereco">${esc(l.endereco)}</p>`}<p class="t-legenda">${esc(l.complemento || '')} ${l.exemplo ? DL.exemplo() : ''}</p></div>
         <ul class="lista-info">${info}</ul>

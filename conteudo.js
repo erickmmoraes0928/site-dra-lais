@@ -114,9 +114,12 @@ window.DL_CONTEUDO = {
     eyebrow: 'Consultório',
     nome: 'Íntegra · Instituto de Saúde Integrativa',
     endereco: 'R. Pastor Abelar Suzano de Siqueira, 157',
-    complemento: 'Pres. Costa e Silva, Itaperuna · RJ, 28300-000',
+    complemento: 'Pres. Costa e Silva, Itaperuna · RJ, 28300‑000', // hífen que não quebra linha
     exemplo: false,
     mapaHref: 'https://maps.app.goo.gl/oZLL1FFkyvNhZmwF7',
+    mapaImagem: 'assets/mapa-integra.png',  // recorte do Google Maps centrado no pino
+    mapaAlt: 'Mapa com o pino da Íntegra, Instituto de Saúde Integrativa, em Itaperuna',
+    mapaCredito: '© Google',
     info: [
       { icone: 'acessibilidade', titulo: 'Acessibilidade', texto: 'Prédio com elevador e rampa de acesso.', exemplo: true },
       { icone: 'estacionamento', titulo: 'Estacionamento', texto: 'Estacionamento rotativo em frente.', exemplo: true },

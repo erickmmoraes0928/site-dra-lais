@@ -48,6 +48,11 @@
   .cartao-conteudo:hover .cartao-conteudo__miniatura .icone { transform: scale(1.12); }
   .grupo-avatares .avatar { transition: transform var(--dur) var(--ease-out); }
   .grupo-avatares .avatar:hover { transform: translateY(-3px); z-index: 1; }
+  /* mapa real: aproxima levemente no hover, como quem se inclina para ver */
+  .local__mapa--real img { transition: transform 600ms var(--ease-out); transform-origin: 50% 55%; }
+  .local__mapa--real:hover img { transform: scale(1.04); }
+  .local__mapa-acao { transition: transform var(--dur) var(--ease-out), box-shadow var(--dur) var(--ease-out); }
+  .local__mapa--real:hover .local__mapa-acao { transform: translateY(-2px); box-shadow: var(--sombra-2); }
   .btn--discreto .icone:last-child { transition: transform var(--dur) var(--ease-out); }
   .btn--discreto:hover > .btn__conteudo > .icone:last-child { transform: translateX(3px); }
 }
