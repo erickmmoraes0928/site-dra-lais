@@ -365,13 +365,10 @@
       <circle cx="60" cy="40" r="18" fill="#EE6926"/>
       <g transform="translate(166 66)"><path d="M18 52s-18-15.6-18-30.6a18 18 0 0 1 36 0C36 36.4 18 52 18 52Z" fill="#2A433D"/><circle cx="18" cy="21" r="6.5" fill="#FEE6CE"/></g></svg>`;
     const info = (l.info || []).map((i) => `<li>${ic(i.icone)}<div><strong>${esc(i.titulo)}</strong><br><span>${esc(i.texto)}</span>${i.exemplo ? ' ' + DL.exemplo() : ''}</div></li>`).join('');
-    // Mapa interativo do Google (iframe). O print fica por baixo e aparece
-    // enquanto o mapa carrega; quando carrega, o mapa surge com um fade.
+    // Mapa interativo do Google (iframe), mostrado direto. O fundo do card
+    // usa o mesmo cinza do carregamento do Google, então a carga é discreta.
     if (l.mapaEmbed) {
-      const poster = l.mapaImagem ? `<img class="local__mapa-poster" src="${esc(l.mapaImagem)}" alt="" aria-hidden="true" decoding="async">` : mapa;
-      const mapaEmbed = `<div class="local__mapa local__mapa--embed">${poster}<iframe src="${esc(l.mapaEmbed)}" title="Mapa interativo: ${esc(l.nome || l.endereco)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen onload="var p=this.parentNode;setTimeout(function(){p.classList.add('is-carregado')},2200)"></iframe></div>`;
-      // O "load" do iframe chega antes de o Google desenhar ruas e pino:
-      // o print segura a cena por 2,2 s e só então cede lugar ao mapa.
+      const mapaEmbed = `<div class="local__mapa local__mapa--embed"><iframe src="${esc(l.mapaEmbed)}" title="Mapa interativo: ${esc(l.nome || l.endereco)}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe></div>`;
       return DL.local({ ...l, mapaEmbed: null, _mapaPronto: mapaEmbed });
     }
     // O mapa ilustrado (ou o print) também é um link para o Google Maps

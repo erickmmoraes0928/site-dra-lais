@@ -212,12 +212,6 @@ html[data-tooltip-aquecido] .tooltip:hover .tooltip__balao { transition-delay: 0
 @keyframes crescer { from { opacity: 0; transform: scale(0.6); } }
 @keyframes desenhar { to { stroke-dashoffset: 0; } }
 
-/* ---------- Mapa interativo: o print "focaliza" e cede lugar ao mapa ----------
-   Desfoque leve para unir as duas imagens durante o crossfade (o print e o
-   mapa real são parecidos, então a troca parece um único ajuste de foco). */
-.local__mapa--embed .local__mapa-poster { transition: opacity 700ms ease, filter 700ms ease, visibility 0s linear 700ms; }
-.local__mapa--embed.is-carregado .local__mapa-poster { filter: blur(4px); }
-
 /* ---------- Botão flutuante ----------
    Entra e sai pelo mesmo caminho (continuidade espacial).
    Saída: mais curta que a entrada, com opacidade, escala e desfoque

@@ -120,9 +120,6 @@ window.DL_CONTEUDO = {
     // Mapa interativo do Google (sem chave de API). Para trocar o local, mude o q=.
     // Busca pelo nome: mostra o pino e o cartão do lugar (testado; com &ll= o pino some)
     mapaEmbed: 'https://maps.google.com/maps?q=%C3%8Dntegra%20-%20Instituto%20de%20Sa%C3%BAde%20Integrativa%2C%20Itaperuna%20RJ&z=17&hl=pt-BR&output=embed',
-    mapaImagem: 'assets/mapa-integra.png',  // print usado enquanto o mapa interativo carrega
-    mapaAlt: 'Mapa com o pino da Íntegra, Instituto de Saúde Integrativa, em Itaperuna',
-    mapaCredito: '© Google',
     info: [
       { icone: 'acessibilidade', titulo: 'Acessibilidade', texto: 'Prédio com elevador e rampa de acesso.', exemplo: true },
       { icone: 'estacionamento', titulo: 'Estacionamento', texto: 'Estacionamento rotativo em frente.', exemplo: true },
